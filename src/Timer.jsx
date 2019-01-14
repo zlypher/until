@@ -31,8 +31,7 @@ export const Timer = ({ time }) => {
         <div className="Timer">
             {d > 0 && (
                 <div>
-                    {d}
-                    days
+                    {d} days
                 </div>
             )}
             <div>
