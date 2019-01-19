@@ -81,15 +81,16 @@
     border-radius: 50%;
     background: transparent;
     cursor: pointer;
+    border: 2px solid;
 }
 
 .App-ScrollBtn--Dark {
-    border: 1px solid #282c34;
+    border-color: #282c34;
     color: #282c34;
 }
 
 .App-ScrollBtn--Light {
-    border: 1px solid #dce4f3;
+    border-color: #dce4f3;
     color: #dce4f3;
 }
 
