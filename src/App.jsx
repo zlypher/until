@@ -10,14 +10,16 @@ const calculateRemainingTime = untilDate => {
 const loadFromUrl = () => {
     const params = new URLSearchParams(window.location.search);
     const until = params.get("until"); // "1995-12-17T03:24:00"
-    const countWorkdays = params.get("wd");
+    const countWorkdays = params.get("wd") === "true";
     const title = params.get("title");
+
+    console.log({ until, countWorkdays, title });
 
     return { until, countWorkdays, title };
 };
 
-const updateUrl = (title, untilDate) => {
-    const url = `/?title=${title}&until=${format(untilDate, "yyyy-MM-dd'T'hh:mm:ss")}`;
+const updateUrl = (title, untilDate, countWorkdays) => {
+    const url = `/?title=${title}&until=${format(untilDate, "yyyy-MM-dd'T'hh:mm:ss")}&wd=${countWorkdays}`;
     window.history.replaceState({}, document.title, url);
 }
 
@@ -41,24 +43,34 @@ class App extends Component {
     }
 
     onChangeTitle(evt) {
+        const { untilDate, countWorkdays } = this.state;
         const title = evt.target.value;
+
         this.setState({
             title: title
-        }, () => updateUrl(title, this.state.untilDate));
+        }, () => updateUrl(title, untilDate, countWorkdays));
     }
 
     onChangeUntilDate(evt) {
+        const { title, countWorkdays } = this.state;
+        const untilDate = new Date(evt.target.value);
+
         this.setState({
-            untilDate: new Date(evt.target.value)
+            untilDate: untilDate
         }, () => {
-            updateUrl(this.state.title, this.state.untilDate)
+            updateUrl(title, untilDate, countWorkdays)
             this.updateTimer();
         });
     }
 
     onChangeCountWorkdays(evt) {
+        const { title, untilDate } = this.state;
+        const countWorkdays = evt.target.checked;
+
         this.setState({
-            countWorkdays: evt.target.checked
+            countWorkdays: countWorkdays
+        }, () => {
+            updateUrl(title, untilDate, countWorkdays);
         });
     }
 
@@ -112,34 +124,36 @@ class App extends Component {
                 </header>
                 <main className="App-Main">
                     <h2 className="App-SectionTitle">Configuration</h2>
-                    <label className="App-Label">
-                        <span className="App-LabelText">Title</span>
-                        <input
-                            className="App-Input"
-                            type="text"
-                            value={title}
-                            onChange={this.onChangeTitle}
-                        />
-                    </label>
-                    <label className="App-Label">
-                        <span className="App-LabelText">Final Date</span>
-                        <input
-                            className="App-Input"
-                            type="datetime-local"
-                            value={format(untilDate, "yyyy-MM-dd'T'hh:mm:ss")}
-                            onChange={this.onChangeUntilDate}
-                        />
-                    </label>
+                    <div className="App-Config">
+                        <label className="App-Label">
+                            <span className="App-LabelText">Title</span>
+                            <input
+                                className="App-Input"
+                                type="text"
+                                value={title}
+                                onChange={this.onChangeTitle}
+                            />
+                        </label>
+                        <label className="App-Label">
+                            <span className="App-LabelText">Final Date</span>
+                            <input
+                                className="App-Input"
+                                type="datetime-local"
+                                value={format(untilDate, "yyyy-MM-dd'T'hh:mm:ss")}
+                                onChange={this.onChangeUntilDate}
+                            />
+                        </label>
 
-                    <label className="App-Label">
-                        <span className="App-LabelText">Count Workdays</span>
-                        <input
-                            className="App-Checkbox"
-                            type="checkbox"
-                            value={countWorkdays}
-                            onChange={this.onChangeCountWorkdays}
-                        />
-                    </label>
+                        <label className="App-Label App-Label--Horizontal">
+                            <input
+                                className="App-Checkbox"
+                                type="checkbox"
+                                checked={countWorkdays}
+                                onChange={this.onChangeCountWorkdays}
+                            />
+                            <span className="App-LabelText">Count Workdays</span>
+                        </label>
+                    </div>
                 </main>
             </div>
         );
