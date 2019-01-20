@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { format } from "date-fns/esm";
 import Timer from "./Timer";
+import { paramsFromString } from "./utils";
 import "./App.css";
 
 const calculateRemainingTime = untilDate => {
@@ -8,12 +9,7 @@ const calculateRemainingTime = untilDate => {
 };
 
 const loadFromUrl = () => {
-    const params = new URLSearchParams(window.location.search);
-    const until = params.get("until"); // "1995-12-17T03:24:00"
-    const countWorkdays = params.get("wd") === "true";
-    const title = params.get("title");
-
-    return { until, countWorkdays, title };
+    return paramsFromString(window.location.search);
 };
 
 const updateUrl = (title, untilDate, countWorkdays) => {
