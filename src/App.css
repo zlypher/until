@@ -25,7 +25,7 @@
 .App-Label {
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
+    align-items: stretch;
     margin: 1em 0;
 }
 
@@ -60,7 +60,6 @@
     font-size: 1em;
     padding: 0.5em;
     height: 1.5em;
-    width: 100%;
 }
 
 .App-Config {
