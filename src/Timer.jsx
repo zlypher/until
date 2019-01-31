@@ -1,4 +1,5 @@
 import React from "react";
+import Mono from "./Mono";
 import { msToTime, simplePluralize } from "./utils";
 import "./Timer.css";
 
@@ -13,12 +14,23 @@ export const Timer = ({ time }) => {
     return (
         <div className="Timer">
             <div>
-                {w > 0 && `${simplePluralize(w, "week")} and `}
-                {d > 0 && simplePluralize(d, "day")}
+                {w > 0 && (
+                    <>
+                        <Mono>{w}</Mono>
+                        <span> {simplePluralize(w, "week")}</span>
+                    </>
+                )}
+                {w > 0 && d > 0 && <span> and </span>}
+                {d > 0 && (
+                    <>
+                        <Mono>{d}</Mono>
+                        <span> {simplePluralize(d, "day")}</span>
+                    </>
+                )}
             </div>
-            <div>
+            <Mono>
                 {hStr}:{mStr}:{sStr}.{msStr}
-            </div>
+            </Mono>
         </div>
     );
 };

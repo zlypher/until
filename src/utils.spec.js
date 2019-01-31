@@ -11,21 +11,21 @@ describe("Utility Functions", () => {
         })
 
         it("formats 0 correctly", () => {
-            expect(simplePluralize(0, "day")).toEqual("0 days")
-            expect(simplePluralize(0, "week")).toEqual("0 weeks")
-            expect(simplePluralize(0, "month")).toEqual("0 months")
+            expect(simplePluralize(0, "day")).toEqual("days")
+            expect(simplePluralize(0, "week")).toEqual("weeks")
+            expect(simplePluralize(0, "month")).toEqual("months")
         })
 
         it("formats singular correctly", () => {
-            expect(simplePluralize(1, "day")).toEqual("1 day")
-            expect(simplePluralize(1, "week")).toEqual("1 week")
-            expect(simplePluralize(1, "month")).toEqual("1 month")
+            expect(simplePluralize(1, "day")).toEqual("day")
+            expect(simplePluralize(1, "week")).toEqual("week")
+            expect(simplePluralize(1, "month")).toEqual("month")
         })
 
         it("formats plural correctly", () => {
-            expect(simplePluralize(10, "day")).toEqual("10 days")
-            expect(simplePluralize(2, "week")).toEqual("2 weeks")
-            expect(simplePluralize(5, "month")).toEqual("5 months")
+            expect(simplePluralize(10, "day")).toEqual("days")
+            expect(simplePluralize(2, "week")).toEqual("weeks")
+            expect(simplePluralize(5, "month")).toEqual("months")
         })
     })
 

@@ -27,7 +27,7 @@ export const msToTime = msecs => {
 };
 
 export const simplePluralize = (count, word) => {
-    return count === 1 ? `${count} ${word}` : `${count} ${word}s`;
+    return count === 1 ? word : `${word}s`;
 };
 
 export const paramsFromString = (queryString) => {
