@@ -1,9 +1,3 @@
-.App {
-    scroll-snap-type: y mandatory;
-    max-height: 100vh;
-    overflow-y: scroll;
-}
-
 .App-Header {
     height: 100vh;
     background-color: #282c34;
@@ -14,7 +8,6 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    scroll-snap-align: start;
 }
 
 .App-Main {
