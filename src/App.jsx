@@ -15,10 +15,13 @@ const loadFromUrl = () => {
 const updateUrl = (title, untilDate, countWorkdays) => {
     const url = `/?title=${title}&until=${format(
         untilDate,
-        "yyyy-MM-dd'T'hh:mm:ss"
+        "yyyy-MM-dd'T'HH:mm:ss"
     )}&wd=${countWorkdays}`;
     window.history.replaceState({}, document.title, url);
 };
+
+const toDateString = datetime => format(datetime, "yyyy-MM-dd");
+const toTimeString = datetime => format(datetime, "HH:mm:ss");
 
 class App extends Component {
     constructor(props) {
@@ -30,9 +33,13 @@ class App extends Component {
         this.mainEl = React.createRef();
         this.headerEl = React.createRef();
 
+        const untilDate = data.until ? new Date(data.until) : new Date();
+
         this.state = {
             isConfigured: data.until !== null,
-            untilDate: data.until ? new Date(data.until) : new Date(),
+            dateValue: toDateString(untilDate),
+            timeValue: toTimeString(untilDate),
+            untilDate: untilDate,
             countWorkdays: data.countWorkdays || false,
             title: data.title || "",
             timeLeft: null
@@ -40,6 +47,7 @@ class App extends Component {
 
         this.onChangeTitle = this.onChangeTitle.bind(this);
         this.onChangeUntilDate = this.onChangeUntilDate.bind(this);
+        this.onChangeUntilTime = this.onChangeUntilTime.bind(this);
         this.onChangeCountWorkdays = this.onChangeCountWorkdays.bind(this);
         this.updateTimer = this.updateTimer.bind(this);
         this.onClickScrollTo = this.onClickScrollTo.bind(this);
@@ -64,12 +72,31 @@ class App extends Component {
     }
 
     onChangeUntilDate(evt) {
-        const { title, countWorkdays } = this.state;
-        const untilDate = new Date(evt.target.value);
+        const { title, countWorkdays, timeValue } = this.state;
+        const dateValue = evt.target.value;
+        const untilDate = new Date(`${dateValue}T${timeValue}`);
 
         this.setState(
             {
-                untilDate: untilDate
+                untilDate: untilDate,
+                dateValue: dateValue
+            },
+            () => {
+                updateUrl(title, untilDate, countWorkdays);
+                this.updateTimer();
+            }
+        );
+    }
+
+    onChangeUntilTime(evt) {
+        const { title, countWorkdays, dateValue } = this.state;
+        const timeValue = evt.target.value;
+        const untilDate = new Date(`${dateValue}T${timeValue}`);
+
+        this.setState(
+            {
+                untilDate: untilDate,
+                timeValue: timeValue
             },
             () => {
                 updateUrl(title, untilDate, countWorkdays);
@@ -135,7 +162,13 @@ class App extends Component {
     }
 
     render() {
-        const { untilDate, countWorkdays, title, timeLeft } = this.state;
+        const {
+            countWorkdays,
+            title,
+            timeLeft,
+            dateValue,
+            timeValue
+        } = this.state;
 
         return (
             <div className="App">
@@ -175,12 +208,15 @@ class App extends Component {
                             <span className="App-LabelText">Final Date</span>
                             <input
                                 className="App-Input"
-                                type="datetime-local"
-                                value={format(
-                                    untilDate,
-                                    "yyyy-MM-dd'T'hh:mm:ss"
-                                )}
+                                type="date"
+                                value={dateValue}
                                 onChange={this.onChangeUntilDate}
+                            />
+                            <input
+                                className="App-Input"
+                                type="time"
+                                value={timeValue}
+                                onChange={this.onChangeUntilTime}
                             />
                         </label>
 
